@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark" data-accent="blue" data-lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vortex — Shift & Attendance Management</title>
+  
+  <style>
+    /* ==========================================================================
+       VORTEX EXECUTIVE OS — Redesigned by Sayed Gouda
+       Apple macOS / iPadOS Pro Desktop Interface
+       Pure OLED Deep Black / Crisp Ceramic Light
+       Dynamic Accent Color Switcher (Cyan, Emerald, Violet, Amber, Rose)
+       Multi-Tab Compact Executive Manager Console
+       ========================================================================== */
+
+    :root {
+      --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, "Cairo", sans-serif;
+      --font-mono: "SF Mono", Menlo, Consolas, monospace;
+
+      /* ACCENT COLORS PRESETS (DEFAULT: ELECTRIC CYAN) */
+      --accent-primary: #38bdf8;
+      --accent-hover: #0ea5e9;
+      --accent-subtle: rgba(56, 189, 248, 0.12);
+      --accent-border: rgba(56, 189, 248, 0.3);
+      --accent-glow: rgba(56, 189, 248, 0.25);
+
+      /* DARK MODE: PURE DEEP OLED BLACK */
+      --bg-canvas: #000000;
+      --card-surface: #0a0d14;
+      --card-surface-elevated: #111522;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-light: rgba(255, 255, 255, 0.05);
+
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --text-faint: #475569;
+
+      --input-bg: #07090e;
+      --header-bg: rgba(0, 0, 0, 0.85);
+
+      --status-green: #10b981;
+      --status-red: #ef4444;
+      --status-amber: #f59e0b;
+    }
+
+    /* THEME: CRISP CERAMIC WHITE */
+    [data-theme="light"] {
+      --bg-canvas: #f4f6fa;
+      --card-surface: #ffffff;
+      --card-surface-elevated: #f8fafc;
+      --card-border: rgba(0, 0, 0, 0.07);
+      --card-border-light: rgba(0, 0, 0, 0.04);
+
+      --text-main: #090d16;
+      --text-sub: #475569;
+      --text-faint: #94a3b8;
+
+      --input-bg: #f8fafc;
+      --header-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    /* COLOR ACCENT VARIATIONS */
+    [data-accent="emerald"] {
+      --accent-primary: #10b981;
+      --accent-hover: #059669;
+      --accent-subtle: rgba(16, 185, 129, 0.12);
+      --accent-border: rgba(16, 185, 129, 0.3);
+      --accent-glow: rgba(16, 185, 129, 0.25);
+    }
+    [data-accent="violet"] {
+      --accent-primary: #a855f7;
+      --accent-hover: #9333ea;
+      --accent-subtle: rgba(168, 85, 247, 0.12);
+      --accent-border: rgba(168, 85, 247, 0.3);
+      --accent-glow: rgba(168, 85, 247, 0.25);
+    }
+    [data-accent="amber"] {
+      --accent-primary: #f59e0b;
+      --accent-hover: #d97706;
+      --accent-subtle: rgba(245, 158, 11, 0.12);
+      --accent-border: rgba(245, 158, 11, 0.3);
+      --accent-glow: rgba(245, 158, 11, 0.25);
+    }
+    [data-accent="rose"] {
+      --accent-primary: #f43f5e;
+      --accent-hover: #e11d48;
+      --accent-subtle: rgba(244, 63, 94, 0.12);
+      --accent-border: rgba(244, 63, 94, 0.3);
+      --accent-glow: rgba(244, 63, 94, 0.25);
+    }
+    [data-accent="silver"] {
+      --accent-primary: #e2e8f0;
+      --accent-hover: #cbd5e1;
+      --accent-subtle: rgba(226, 232, 240, 0.12);
+      --accent-border: rgba(226, 232, 240, 0.3);
+      --accent-glow: rgba(226, 232, 240, 0.2);
+    }
+
+    /* Bilingual Direction Rules */
+    html[data-lang="en"] { direction: ltr; }
+    html[data-lang="en"] .text-start { text-align: left; }
+    html[data-lang="ar"] .text-start { text-align: right; }
+    html[data-lang="en"] .vortex-table { text-align: left; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-system);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      letter-spacing: -0.015em;
+    }
+
+    /* Desktop Optimal Canvas (1200px max width for professional screen density) */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    /* Apple Precision Card */
+    .pro-card {
+      background: var(--card-surface);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    /* ==========================================================================
+       HEADER
+       ========================================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    /* High-End Professional Vortex Logo (Custom Geometric Core) */
+    .vortex-logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #090d14, #151b28);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .vortex-logo-badge svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .brand-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 11px;
+      background: var(--card-surface-elevated);
+      border: 1px solid var(--card-border);
+      color: var(--text-sub);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-nav:hover {
+      border-color: var(--accent-border);
+      color: var(--accent-primary);
+    }
+
+    .btn-nav-primary {
+      background: var(--accent-subtle);
+      border-color: var(--accent-border);
+      color: var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       MAIN WORKSPACE
+       ========================================================================== */
+    main {
+      flex: 1;
+      padding: 28px 0 40px 0;
+    }
+
+    /* 1. LOGIN SCREEN */
+    .login-box {
+      max-width: 420px;
+      margin: 70px auto;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .login-box p {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 2px var(--accent-subtle);
+    }
+
+    .pin-input {
+      letter-spacing: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      font-family: var(--font-mono);
+      direction: ltr;
+    }
+
+    .btn-action-primary {
+      width: 100%;
+      background: var(--accent-primary);
+      border: none;
+      color: #000;
+      font-weight: 800;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+    }
+
+    /* 2. AGENT DESKTOP VIEW */
+    .agent-status-strip {
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .agent-bio {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .agent-avatar-ring {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--card-surface-elevated);
+      border: 1.5px solid var(--accent-border);
+      color: var(--accent-primary);
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .agent-avatar-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .agent-headline {
+      font-size: 19px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--card-surface-elevated);
+      color: var(--text-sub);
+      border: 1px solid var(--card-border);
+    }
+
+    .status-tag.online { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3); }
+    .status-tag.break { background: var(--accent-subtle); color: var(--accent-primary); border-color: var(--accent-border); }
+
+    .agent-subhead {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .btn-shift-master {
+      padding: 13px 28px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-shift-master.clock-in { background: #10b981; }
+    .btn-shift-master.clock-in:hover { background: #059669; }
+    .btn-shift-master.clock-out { background: #ef4444; }
+    .btn-shift-master.clock-out:hover { background: #dc2626; }
+
+    /* Timers Grid */
+    .desktop-timers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .timer-box {
+      padding: 22px 24px;
+    }
+
+    .timer-caption {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timer-value {
+      font-family: var(--font-mono);
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    html[data-lang="en"] .timer-value { text-align: left; }
+    .timer-value.colored { color: var(--accent-primary); }
+
+    .timer-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border-light);
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* Breaks Section */
+    .breaks-console {
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .breaks-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .breaks-heading {
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .btn-standalone-end {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      padding: 9px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-standalone-end.active { display: inline-flex; }
+    .btn-standalone-end:hover { background: #ef4444; color: #fff; }
+
+    .breaks-5-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .break-item-card {
+      background: var(--card-surface-elevated);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .break-item-card:hover:not(:disabled) {
+      border-color: var(--accent-border);
+      transform: translateY(-2px);
+    }
+
+    .break-item-card.current {
+      border-color: var(--accent-primary);
+      background: var(--accent-subtle);
+      box-shadow: 0 0 0 1px var(--accent-primary);
+    }
+
+    .break-item-card.locked {
+      opacity: 0.35 !important;
+      cursor: not-allowed !important;
+      border-style: dashed;
+    }
+
+    .break-item-card:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .break-sym {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .break-txt {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .break-subtxt {
+      font-size: 11px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    /* Logs Desktop Table */
+    .table-console {
+      padding: 22px 24px;
+    }
+
+    .vortex-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .vortex-table th {
+      padding: 10px 14px;
+      color: var(--text-faint);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .vortex-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border-light);
+      color: var(--text-sub);
+    }
+
+    /* ==========================================================================
+       3. REDESIGNED COMPACT EXECUTIVE MANAGER CONSOLE
+       Multi-tab compact layout solves the infinite scrolling problem!
+       ========================================================================== */
+    .manager-console-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .manager-tabs-bar {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 12px;
+      margin-bottom: 8px;
+    }
+
+    .tab-btn {
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--card-surface-elevated);
+      border-color: var(--card-border);
+      color: var(--accent-primary);
+    }
+
+    .manager-tab-pane {
+      display: none;
+    }
+
+    .manager-tab-pane.active {
+      display: block;
+    }
+
+    /* Compact Scrollable Split Panels */
+    .manager-split-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 16px;
+    }
+
+    .scrollable-agent-list {
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .agent-row-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--card-surface-elevated);
+      border: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .agent-row-item:hover, .agent-row-item.selected {
+      border-color: var(--accent-border);
+    }
+
+    /* ==========================================================================
+       SETTINGS MODAL (Unified Hub: Theme, Custom Accents, Lang, Profile)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(14px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-body {
+      width: 100%;
+      max-width: 480px;
+      padding: 30px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .settings-subheading {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .settings-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--card-border-light);
+    }
+
+    /* Custom Accent Color Palette Dots */
+    .color-dots-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .color-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s ease;
+    }
+
+    .color-dot:hover { transform: scale(1.15); }
+    .color-dot.active { border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+    .dot-cyan { background: #38bdf8; }
+    .dot-emerald { background: #10b981; }
+    .dot-violet { background: #a855f7; }
+    .dot-amber { background: #f59e0b; }
+    .dot-rose { background: #f43f5e; }
+    .dot-silver { background: #e2e8f0; }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 22px 0;
+      color: var(--text-faint);
+      font-size: 12px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .hidden-file { display: none; }
+
+    @media (max-width: 900px) {
+      .breaks-5-grid { grid-template-columns: repeat(2, 1fr); }
+      .desktop-timers-grid { grid-template-columns: 1fr; }
+      .manager-split-grid { grid-template-columns: 1fr; }
+      .agent-status-strip { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .btn-shift-master { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER
+       ========================================================================== -->
+  <header>
+    <div class="container header-inner">
+      <div class="brand-wrap" onclick="exitAdminView()">
+        <!-- Precision Vortex Core Vector Logo -->
+        <div class="vortex-logo-badge" title="Vortex Core">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M12 2a10 10 0 1 0 10 10" stroke="var(--accent-primary)"/>
+            <path d="M12 6a6 6 0 1 0 6 6" stroke="var(--text-main)"/>
+            <circle cx="12" cy="12" r="2" fill="var(--accent-primary)"/>
+          </svg>
+        </div>
+        <div class="brand-text-block">
+          <span class="brand-name">Vortex</span>
+          <span class="brand-subtitle">Designed by Sayed Gouda</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Settings Hub (Theme + Accent Colors + Language + Profile) -->
+        <button id="btnSettingsOpen" class="btn-nav" onclick="openSettingsModal()">
+          ⚙️ <span data-i18n="settingsTitle">الإعدادات</span>
+        </button>
+
+        <!-- Audio Toggle -->
+        <button id="btnAudioToggle" class="btn-nav" onclick="toggleAudio()">
+          🔊
+        </button>
+
+        <!-- Executive Manager Panel -->
+        <button id="btnManagerDashboard" class="btn-nav btn-nav-primary" onclick="openManagerLoginModal()">
+          🛡️ <span data-i18n="managerPanel">لوحة المدير</span>
+        </button>
+
+        <!-- Agent Logout -->
+        <button id="btnLogout" class="btn-nav" style="display: none; color: #ef4444;" onclick="logoutAgent()">
+          🚪 <span data-i18n="logout">خروج</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         1. AGENT LOGIN VIEW
+    ══════════════════════════════════════════════════════════════ -->
+    <div id="viewLogin" class="pro-card login-box">
+      <h2 data-i18n="loginHeading">تسجيل الدخول</h2>
+      <p data-i18n="loginSub">ادخل اسمك الأول وكود الـ PIN الخاص بك للبدء</p>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="firstNameLabel">الاسم الأول:</label>
+        <input type="text" id="loginFirstName" placeholder="Your name..." class="form-input"
+          onkeydown="if(event.key==='Enter') document.getElementById('loginPin').focus()" />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="pinLabel">الكود المكون من 4 أرقام (PIN):</label>
+        <input type="password" id="loginPin" maxlength="4" placeholder="••••" class="form-input pin-input"
+          onkeydown="if(event.key==='Enter') loginAgent()" />
+      </div>
+
+      <button class="btn-action-primary" onclick="loginAgent()" data-i18n="btnLogin">
+        بدء الشيفت
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         2. AGENT WORKSPACE VIEW
+    ══════════════════════════════════════════════════════════════ -->
+    <div id="viewAgent" style="display: none;">
+
+      <!-- Status Bar -->
+      <div class="pro-card agent-status-strip">
+        <div class="agent-bio">
+          <div class="agent-avatar-ring" onclick="triggerPhotoUpload()" title="تغيير الصورة الشخصية">
+            <div id="agentAvatarBox">👤</div>
+          </div>
+          <input type="file" id="photoFileInput" accept="image/*" class="hidden-file" onchange="handlePhotoUpload(event)" />
+
+          <div>
+            <div class="agent-headline">
+              <span id="agentDisplayName">—</span>
+              <span id="agentStatusBadge" class="status-tag">خارج الشيفت</span>
+            </div>
+            <div class="agent-subhead">
+              PIN: <strong id="agentDisplayPin" style="font-family: var(--font-mono);">—</strong> •
+              <span id="agentDisplayTeam">Alpha Ops</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="btnClockToggle" class="btn-shift-master clock-in" onclick="toggleClock()">
+          <span id="clockToggleText" data-i18n="btnClockIn">تسجيل حضور (Clock In)</span>
+        </button>
+      </div>
+
+      <!-- Timers Grid -->
+      <div class="desktop-timers-grid">
+        <div class="pro-card timer-box">
+          <div class="timer-caption" data-i18n="totalShiftTitle">إجمالي وقت الشيفت المنقضي</div>
+          <div id="shiftTimerDisplay" class="timer-value">00:00:00</div>
+          <div class="timer-footer"><span data-i18n="clockInTimeLabel">وقت الحضور:</span> <strong id="shiftStartTimeText">—</strong></div>
+        </div>
+
+        <div id="breakTimerCard" class="pro-card timer-box">
+          <div class="timer-caption" data-i18n="breakDurationTitle">مدة الاستراحة الحالية</div>
+          <div id="breakTimerDisplay" class="timer-value colored">00:00:00</div>
+          <div class="timer-footer"><span data-i18n="currentBreakLabel">نوع الاستراحة:</span> <strong id="activeBreakCategoryText">لا يوجد</strong></div>
+        </div>
+      </div>
+
+      <!-- Breaks Console (5 Breaks + Dedicated End Break Button) -->
+      <div class="pro-card breaks-console">
+        <div class="breaks-header-row">
+          <div class="breaks-heading" data-i18n="breakControlTitle">الاستراحات المعتمدة</div>
+          <!-- STANDALONE DEDICATED END BREAK BUTTON -->
+          <button id="btnEndBreakStandalone" class="btn-standalone-end" onclick="endBreakAndReturnToWork()">
+            ⏹️ <span data-i18n="btnEndBreak">إنهاء البريك (End Break)</span>
+          </button>
+        </div>
+
+        <input type="text" id="notesInput" placeholder="ملاحظات الحركة (اختياري)..." class="form-input" style="margin-bottom: 16px;" />
+
+        <div class="breaks-5-grid">
+          <!-- 1. First Break (30 Mins, Locked after single use) -->
+          <button id="btnBreak1" class="break-item-card" disabled onclick="startBreak('FIRST_BREAK', 'First Break (30m)', true)">
+            <div class="break-sym">☕</div>
+            <div class="break-txt">First Break</div>
+            <div class="break-subtxt">30 Mins (Once)</div>
+          </button>
+
+          <!-- 2. Second Break (30 Mins, Locked after single use) -->
+          <button id="btnBreak2" class="break-item-card" disabled onclick="startBreak('SECOND_BREAK', 'Second Break (30m)', true)">
+            <div class="break-sym">🥪</div>
+            <div class="break-txt">Second Break</div>
+            <div class="break-subtxt">30 Mins (Lunch)</div>
+          </button>
+
+          <!-- 3. On Task (Break Category, Open duration) -->
+          <button id="btnOnTask" class="break-item-card" disabled onclick="startBreak('ON_TASK', 'On Task', false)">
+            <div class="break-sym">💻</div>
+            <div class="break-txt">On Task</div>
+            <div class="break-subtxt">Special Task</div>
+          </button>
+
+          <!-- 4. WC (Restroom) -->
+          <button id="btnRestroom" class="break-item-card" disabled onclick="startBreak('WC', 'WC', false)">
+            <div class="break-sym">🚻</div>
+            <div class="break-txt">WC</div>
+            <div class="break-subtxt">Restroom</div>
+          </button>
+
+          <!-- 5. Meeting -->
+          <button id="btnMeeting" class="break-item-card" disabled onclick="startBreak('MEETING', 'Meeting', false)">
+            <div class="break-sym">👥</div>
+            <div class="break-txt">Meeting</div>
+            <div class="break-subtxt">Training / Sync</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Activity Log -->
+      <div class="pro-card table-console">
+        <div class="breaks-heading" style="margin-bottom: 14px;" data-i18n="myLogsTitle">حركات الشيفت الحالي</div>
+        <table class="vortex-table">
+          <thead>
+            <tr>
+              <th data-i18n="thTime">الوقت</th>
+              <th data-i18n="thAction">الحالة</th>
+              <th data-i18n="thDuration">المدة</th>
+              <th data-i18n="thNotes">الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody id="logsTableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         3. EXECUTIVE MANAGER CONSOLE (Compact Multi-Tab Interface)
+    ══════════════════════════════════════════════════════════════ -->
+    <div id="viewAdmin" style="display: none;">
+
+      <div class="manager-console-wrap">
+        <!-- Top Toolbar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h2 style="font-size: 22px; font-weight: 800;" data-i18n="adminTitle">لوحة تحكم الإدارة التنفيذية</h2>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-nav" onclick="openAddAgentModal()">➕ <span data-i18n="btnAddAgent">إضافة موظف</span></button>
+            <button class="btn-nav" onclick="openManagerProfileModal()">👤 <span data-i18n="btnMgrProfile">تعديل بيانات المدير</span></button>
+            <button class="btn-nav" onclick="exitAdminView()"><span data-i18n="btnBackWork">رجوع</span></button>
+          </div>
+        </div>
+
+        <!-- Manager Multi-Tabs Navigation Bar -->
+        <div class="manager-tabs-bar">
+          <button id="tabBtnOverview" class="tab-btn active" onclick="switchManagerTab('overview')" data-i18n="tabOverview">نظرة عامة وفريق العمل</button>
+          <button id="tabBtnLogs" class="tab-btn" onclick="switchManagerTab('logs')" data-i18n="tabLogs">سجل الحركات الأحدث</button>
+          <button id="tabBtnCloud" class="tab-btn" onclick="switchManagerTab('cloud')" data-i18n="tabCloud">ربط Google Sheets</button>
+        </div>
+
+        <!-- TAB 1: OVERVIEW & TEAM ROSTER -->
+        <div id="tabPaneOverview" class="manager-tab-pane active">
+          <!-- 4 Stat Metric Cards -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+            <div class="pro-card" style="padding: 16px;">
+              <div style="font-size: 11px; color: var(--text-faint);" data-i18n="statTotal">إجمالي الموظفين</div>
+              <div id="statTotalAgents" style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); margin-top: 4px;">0</div>
+            </div>
+            <div class="pro-card" style="padding: 16px;">
+              <div style="font-size: 11px; color: var(--text-faint);" data-i18n="statOnShift">في الشيفت (نشط)</div>
+              <div id="statOnShift" style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); margin-top: 4px; color: #10b981;">0</div>
+            </div>
+            <div class="pro-card" style="padding: 16px;">
+              <div style="font-size: 11px; color: var(--text-faint);" data-i18n="statOnBreak">في استراحة</div>
+              <div id="statOnBreak" style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); margin-top: 4px; color: var(--accent-primary);">0</div>
+            </div>
+            <div class="pro-card" style="padding: 16px;">
+              <div style="font-size: 11px; color: var(--text-faint);" data-i18n="statOffline">خارج الشيفت</div>
+              <div id="statOffline" style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); margin-top: 4px; color: var(--text-faint);">0</div>
+            </div>
+          </div>
+
+          <!-- Split Panel: Quick Roster List & Selected Agent Details -->
+          <div class="manager-split-grid">
+            <div class="pro-card" style="padding: 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-weight: 800; font-size: 13px;" data-i18n="teamListTitle">قائمة الفريق</span>
+                <span id="rosterCountBadge" style="font-size: 11px; color: var(--text-faint);">0 موظف</span>
+              </div>
+              <div id="adminScrollableRoster" class="scrollable-agent-list"></div>
+            </div>
+
+            <div class="pro-card" style="padding: 22px;">
+              <div style="font-weight: 800; font-size: 15px; margin-bottom: 14px;" data-i18n="liveTrackingTitle">المتابعة المباشرة للموظف المحدد</div>
+              <div id="agentDetailInspector" style="color: var(--text-sub); font-size: 13px;">
+                اضغط على أي موظف من القائمة لمعاينة تفاصيله، تعديل كوده، أو حذفه فوراً.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: AUDIT LOGS -->
+        <div id="tabPaneLogs" class="manager-tab-pane">
+          <div class="pro-card table-console">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-weight: 800; font-size: 15px;" data-i18n="auditLogsTitle">سجل الحركات الأحدث</span>
+              <button class="btn-nav" style="height: 30px; font-size: 11px;" onclick="renderAdminAuditLogs()">🔄 تحديث</button>
+            </div>
+            <div style="max-height: 480px; overflow-y: auto;">
+              <table class="vortex-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thTime">الوقت</th>
+                    <th data-i18n="thAgent">الموظف</th>
+                    <th data-i18n="thAction">الحركة</th>
+                    <th data-i18n="thDuration">المدة</th>
+                    <th data-i18n="thNotes">الملاحظات</th>
+                  </tr>
+                </thead>
+                <tbody id="adminLogsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: GOOGLE SHEETS SETUP -->
+        <div id="tabPaneCloud" class="manager-tab-pane">
+          <div class="pro-card" style="padding: 24px; max-width: 680px;">
+            <div style="font-weight: 800; font-size: 16px; margin-bottom: 8px;">🔗 ربط خادم Google Sheets المركزي</div>
+            <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 20px;">
+              الصق رابط الـ Web App URL الذي تم نشره من Google Apps Script لربط جميع حركات الموظفين في قاعدة البيانات المركزية.
+            </p>
+
+            <div class="form-group text-start">
+              <label class="form-label">Google Apps Script Web App URL:</label>
+              <input type="url" id="adminWebhookInput" placeholder="https://script.google.com/macros/s/.../exec"
+                class="form-input" style="direction: ltr; font-family: var(--font-mono); font-size: 13px;" />
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+              <button class="btn-nav btn-nav-primary" onclick="saveAdminWebhook()" data-i18n="btnSaveUrl">حفظ الرابط</button>
+              <button class="btn-nav" onclick="testSheetFromAdmin()" data-i18n="btnTestRow">🚀 إرسال صف تجريبي للتأكد</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODALS: SETTINGS HUB (Custom Theme, Custom Accent Colors, Lang, Profile)
+       ========================================================================== -->
+  <div id="settingsModal" class="modal-backdrop">
+    <div class="pro-card modal-body">
+      <div class="modal-header">
+        <h3 style="font-size: 17px; font-weight: 800;" data-i18n="settingsTitle">الإعدادات والتفضيلات</h3>
+        <button class="btn-nav" style="height: 30px; padding: 0 10px;" onclick="closeSettingsModal()">✕</button>
+      </div>
+
+      <!-- Mode (Dark OLED / Light Ceramic) -->
+      <div class="settings-subheading" data-i18n="appearanceSection">النمط اللوني العام</div>
+      <div class="settings-item-row">
+        <span style="font-size: 14px;" data-i18n="themeChoice">الوضع (Mode):</span>
+        <div style="display: flex; gap: 6px;">
+          <button id="themeBtnDark" class="btn-nav" onclick="setAppTheme('dark')">🌙 Dark</button>
+          <button id="themeBtnLight" class="btn-nav" onclick="setAppTheme('light')">☀️ Light</button>
+        </div>
+      </div>
+
+      <!-- ACCENT COLOR PALETTE SWITCHER (6 Custom Colors) -->
+      <div class="settings-item-row">
+        <span style="font-size: 14px;" data-i18n="accentChoice">اللون المميز (Accent Color):</span>
+        <div class="color-dots-group">
+          <div class="color-dot dot-cyan" onclick="setAccentColor('blue')" title="Electric Cyan"></div>
+          <div class="color-dot dot-emerald" onclick="setAccentColor('emerald')" title="Emerald Green"></div>
+          <div class="color-dot dot-violet" onclick="setAccentColor('violet')" title="Royal Violet"></div>
+          <div class="color-dot dot-amber" onclick="setAccentColor('amber')" title="Sunset Amber"></div>
+          <div class="color-dot dot-rose" onclick="setAccentColor('rose')" title="Ruby Rose"></div>
+          <div class="color-dot dot-silver" onclick="setAccentColor('silver')" title="Titanium Silver"></div>
+        </div>
+      </div>
+
+      <!-- Language Switcher -->
+      <div class="settings-item-row" style="margin-bottom: 18px;">
+        <span style="font-size: 14px;" data-i18n="langChoice">اللغة (Language):</span>
+        <div style="display: flex; gap: 6px;">
+          <button id="langBtnAr" class="btn-nav" onclick="setAppLanguage('ar')">العربية</button>
+          <button id="langBtnEn" class="btn-nav" onclick="setAppLanguage('en')">English</button>
+        </div>
+      </div>
+
+      <!-- Agent Profile Details -->
+      <div id="settingsAgentInfoBlock" style="display: none;">
+        <div class="settings-subheading" data-i18n="agentProfileSection">بيانات حساب الموظف</div>
+        <div class="settings-item-row">
+          <span style="font-size: 14px;" data-i18n="photoLabel">الصورة الشخصية:</span>
+          <button class="btn-nav" onclick="triggerPhotoUpload()" data-i18n="btnUploadPhoto">📷 رفع صورة</button>
+        </div>
+        <div class="settings-item-row">
+          <span style="font-size: 14px;" data-i18n="nameFieldLabel">الاسم:</span>
+          <strong id="settingsAgentNameVal">—</strong>
+        </div>
+        <div class="settings-item-row">
+          <span style="font-size: 14px;" data-i18n="pinFieldLabel">كود الدخول (PIN):</span>
+          <strong id="settingsAgentPinVal" style="font-family: var(--font-mono);">—</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manager Login Modal -->
+  <div id="managerLoginModal" class="modal-backdrop">
+    <div class="pro-card modal-body">
+      <div class="modal-header">
+        <h3 style="font-size: 17px; font-weight: 800;" data-i18n="modalMgrTitle">دخول لوحة المدير</h3>
+        <button class="btn-nav" style="height: 30px; padding: 0 10px;" onclick="closeManagerLoginModal()">✕</button>
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="mgrUserLabel">اسم المدير:</label>
+        <input type="text" id="adminUsername" value="admin" class="form-input" />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="mgrPassLabel">كلمة المرور:</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" class="form-input"
+          onkeydown="if(event.key==='Enter') verifyManagerLogin()" />
+      </div>
+
+      <button class="btn-action-primary" onclick="verifyManagerLogin()" data-i18n="btnLoginMgr">تسجيل الدخول</button>
+    </div>
+  </div>
+
+  <!-- Manager Full Profile & Credentials Modal -->
+  <div id="managerProfileModal" class="modal-backdrop">
+    <div class="pro-card modal-body">
+      <div class="modal-header">
+        <h3 style="font-size: 17px; font-weight: 800;">تعديل بيانات المدير والإدارة</h3>
+        <button class="btn-nav" style="height: 30px; padding: 0 10px;" onclick="closeManagerProfileModal()">✕</button>
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label">اسم المدير (Manager Username):</label>
+        <input type="text" id="mgrProfileUsername" class="form-input" />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label">البريد الإلكتروني للإدارة (اختياري):</label>
+        <input type="email" id="mgrProfileEmail" placeholder="manager@company.com" class="form-input" />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label">كلمة المرور الحالية:</label>
+        <input type="password" id="mgrCurrentPass" class="form-input" />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label">كلمة المرور الجديدة (اتركها فارغة إذا لم ترد التغيير):</label>
+        <input type="password" id="mgrNewPass" class="form-input" />
+      </div>
+
+      <button class="btn-action-primary" onclick="saveManagerProfileSettings()">حفظ بيانات المدير</button>
+    </div>
+  </div>
+
+  <!-- Add / Edit Agent Modal -->
+  <div id="agentEditModal" class="modal-backdrop">
+    <div class="pro-card modal-body">
+      <div class="modal-header">
+        <h3 id="agentModalTitle" style="font-size: 17px; font-weight: 800;" data-i18n="modalAgentTitle">تعديل موظف</h3>
+        <button class="btn-nav" style="height: 30px; padding: 0 10px;" onclick="closeAgentEditModal()">✕</button>
+      </div>
+
+      <input type="hidden" id="editAgentOriginalPin" />
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="firstNameLabel">الاسم الأول:</label>
+        <input type="text" id="modalAgentName" class="form-input" required />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="pinLabel">الكود المكون من 4 أرقام (PIN):</label>
+        <input type="text" id="modalAgentPin" maxlength="4" class="form-input pin-input" required />
+      </div>
+
+      <div class="form-group text-start">
+        <label class="form-label" data-i18n="teamFieldLabel">القسم / الفريق:</label>
+        <input type="text" id="modalAgentTeam" class="form-input" value="Alpha Ops" />
+      </div>
+
+      <button class="btn-action-primary" onclick="saveAgentFromModal()" data-i18n="btnSaveAgent">حفظ التغييرات</button>
+    </div>
+  </div>
+
+  <!-- Toast Box -->
+  <div id="vortexToast" style="position: fixed; bottom: 24px; left: 24px; background: var(--card-surface-elevated); border: 1px solid var(--accent-border); color: var(--text-main); padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; display: none; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    <span id="toastMessage"></span>
+  </div>
+
+  <footer>
+    <div class="container">
+      Vortex- Designed by Sayed Gouda.
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       VORTEX CORE SCRIPT
+       ========================================================================== -->
+  <script>
+    /* ─────────────────────────────────────────────────────────────────────────
+       1. BILINGUAL DICTIONARY
+    ───────────────────────────────────────────────────────────────────────── */
+    const I18N = {
+      ar: {
+        settingsTitle: "الإعدادات",
+        managerPanel: "لوحة المدير",
+        logout: "خروج",
+        loginHeading: "تسجيل الدخول",
+        loginSub: "ادخل اسمك الأول وكود الـ PIN الخاص بك للبدء",
+        firstNameLabel: "الاسم الأول:",
+        pinLabel: "الكود المكون من 4 أرقام (PIN):",
+        btnLogin: "بدء الشيفت",
+        btnClockIn: "تسجيل حضور (Clock In)",
+        btnClockOut: "تسجيل انصراف (Clock Out)",
+        totalShiftTitle: "إجمالي وقت الشيفت المنقضي",
+        clockInTimeLabel: "وقت الحضور:",
+        breakDurationTitle: "مدة الاستراحة الحالية",
+        currentBreakLabel: "نوع الاستراحة:",
+        breakControlTitle: "الاستراحات المعتمدة",
+        btnEndBreak: "إنهاء البريك (End Break)",
+        myLogsTitle: "حركات الشيفت الحالي",
+        thTime: "الوقت",
+        thAction: "الحالة",
+        thDuration: "المدة",
+        thNotes: "الملاحظات",
+        thAgent: "الموظف",
+        adminTitle: "لوحة تحكم الإدارة التنفيذية",
+        btnAddAgent: "إضافة موظف",
+        btnMgrProfile: "تعديل بيانات المدير",
+        btnBackWork: "رجوع",
+        tabOverview: "نظرة عامة وفريق العمل",
+        tabLogs: "سجل الحركات الأحدث",
+        tabCloud: "ربط Google Sheets",
+        btnSaveUrl: "حفظ الرابط",
+        btnTestRow: "🚀 إرسال صف تجريبي للتأكد",
+        statTotal: "إجمالي الموظفين",
+        statOnShift: "في الشيفت (نشط)",
+        statOnBreak: "في استراحة",
+        statOffline: "خارج الشيفت",
+        teamListTitle: "قائمة الفريق",
+        liveTrackingTitle: "المتابعة المباشرة للموظف المحدد",
+        auditLogsTitle: "سجل الحركات الأحدث",
+        appearanceSection: "النمط اللوني العام",
+        themeChoice: "الوضع (Mode):",
+        accentChoice: "اللون المميز (Accent Color):",
+        langChoice: "اللغة (Language):",
+        agentProfileSection: "بيانات حساب الموظف",
+        photoLabel: "الصورة الشخصية:",
+        btnUploadPhoto: "📷 رفع صورة",
+        nameFieldLabel: "الاسم:",
+        pinFieldLabel: "كود الدخول (PIN):",
+        teamFieldLabel: "القسم / الفريق:",
+        modalMgrTitle: "دخول لوحة المدير",
+        mgrUserLabel: "اسم المدير:",
+        mgrPassLabel: "كلمة المرور:",
+        btnLoginMgr: "تسجيل الدخول",
+        modalAgentTitle: "تعديل موظف",
+        btnSaveAgent: "حفظ التغييرات"
+      },
+      en: {
+        settingsTitle: "Settings",
+        managerPanel: "Manager Panel",
+        logout: "Logout",
+        loginHeading: "Sign In",
+        loginSub: "Enter your first name and 4-digit PIN",
+        firstNameLabel: "First Name:",
+        pinLabel: "4-Digit PIN:",
+        btnLogin: "Start Shift",
+        btnClockIn: "Clock In",
+        btnClockOut: "Clock Out",
+        totalShiftTitle: "Total Shift Duration",
+        clockInTimeLabel: "Started at:",
+        breakDurationTitle: "Current Break Duration",
+        currentBreakLabel: "Break Type:",
+        breakControlTitle: "Authorized Breaks",
+        btnEndBreak: "End Break",
+        myLogsTitle: "Current Shift Records",
+        thTime: "Time",
+        thAction: "State",
+        thDuration: "Duration",
+        thNotes: "Notes",
+        thAgent: "Agent",
+        adminTitle: "Executive Management Console",
+        btnAddAgent: "Add Agent",
+        btnMgrProfile: "Manager Credentials",
+        btnBackWork: "Back",
+        tabOverview: "Overview & Roster",
+        tabLogs: "Activity Stream",
+        tabCloud: "Google Sheets Cloud",
+        btnSaveUrl: "Save URL",
+        btnTestRow: "🚀 Send Test Ping",
+        statTotal: "Total Team",
+        statOnShift: "On Shift (Active)",
+        statOnBreak: "On Break",
+        statOffline: "Offline",
+        teamListTitle: "Team Roster",
+        liveTrackingTitle: "Selected Agent Inspection",
+        auditLogsTitle: "Recent Audit Stream",
+        appearanceSection: "Interface Style",
+        themeChoice: "Theme Mode:",
+        accentChoice: "Accent Color:",
+        langChoice: "Language:",
+        agentProfileSection: "Personal Profile",
+        photoLabel: "Profile Picture:",
+        btnUploadPhoto: "📷 Upload Photo",
+        nameFieldLabel: "Name:",
+        pinFieldLabel: "PIN Code:",
+        teamFieldLabel: "Department / Team:",
+        modalMgrTitle: "Manager Sign In",
+        mgrUserLabel: "Manager Username:",
+        mgrPassLabel: "Password:",
+        btnLoginMgr: "Sign In",
+        modalAgentTitle: "Edit Agent",
+        btnSaveAgent: "Save Changes"
+      }
+    };
+
+    let currentLang = localStorage.getItem('vortex_lang') || 'ar';
+
+    function setAppLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('vortex_lang', lang);
+      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+      document.getElementById('langBtnAr').classList.toggle('btn-nav-primary', lang === 'ar');
+      document.getElementById('langBtnEn').classList.toggle('btn-nav-primary', lang === 'en');
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[lang] && I18N[lang][key]) {
+          el.innerText = I18N[lang][key];
+        }
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       2. THEME & CUSTOM ACCENT COLOR SWITCHER
+    ───────────────────────────────────────────────────────────────────────── */
+    function setAppTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('vortex_theme', theme);
+      document.getElementById('themeBtnDark').classList.toggle('btn-nav-primary', theme === 'dark');
+      document.getElementById('themeBtnLight').classList.toggle('btn-nav-primary', theme === 'light');
+    }
+
+    function setAccentColor(accent) {
+      document.documentElement.setAttribute('data-accent', accent);
+      localStorage.setItem('vortex_accent', accent);
+
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      const activeDot = document.querySelector(`.dot-${accent === 'blue' ? 'cyan' : accent}`);
+      if (activeDot) activeDot.classList.add('active');
+
+      playSound('click');
+      showToast(currentLang === 'ar' ? "تم تغيير اللون المميز" : "Accent color updated");
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       3. SYNTHESIZED SOUND SYSTEM (Web Audio API)
+    ───────────────────────────────────────────────────────────────────────── */
+    let audioEnabled = localStorage.getItem('vortex_sound') !== 'false';
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (type === 'click') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'bell') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, now);
+          osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      localStorage.setItem('vortex_sound', audioEnabled ? 'true' : 'false');
+      document.getElementById('btnAudioToggle').innerText = audioEnabled ? '🔊' : '🔇';
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       4. ROSTER & STORAGE
+    ───────────────────────────────────────────────────────────────────────── */
+    const DEFAULT_AGENTS = [
+      { firstName: "سيد",    pin: "1001", team: "Alpha Ops" },
+      { firstName: "Sarah",  pin: "1002", team: "Alpha Ops" },
+      { firstName: "أحمد",   pin: "1003", team: "Support" },
+      { firstName: "Alex",   pin: "1004", team: "Escalations" }
+    ];
+
+    let agents = JSON.parse(localStorage.getItem('vortex_agents') || 'null');
+    if (!agents || !Array.isArray(agents) || agents.length === 0) {
+      agents = DEFAULT_AGENTS;
+      localStorage.setItem('vortex_agents', JSON.stringify(agents));
+    }
+
+    let currentAgent = JSON.parse(localStorage.getItem('vortex_user') || 'null');
+    let scriptUrl = localStorage.getItem('vortex_webhook') || '';
+    let logs = JSON.parse(localStorage.getItem('vortex_logs') || '[]');
+
+    function saveAgents() {
+      localStorage.setItem('vortex_agents', JSON.stringify(agents));
+      if (scriptUrl) {
+        const slim = agents.map(a => ({ pin: a.pin, firstName: a.firstName, team: a.team || 'Operations' }));
+        new Image().src = scriptUrl + '?action=saveAgents&data=' + encodeURIComponent(JSON.stringify(slim));
+      }
+    }
+
+    /* MANAGER CREDENTIALS STORE (Username + Password + Email) */
+    function getManagerCredentials() {
+      return {
+        username: localStorage.getItem('vortex_mgr_username') || 'admin',
+        password: localStorage.getItem('vortex_admin_pass') || '1234',
+        email: localStorage.getItem('vortex_mgr_email') || 'manager@vortex.com'
+      };
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('vortexToast');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
+    }
+
+    function formatDuration(ms) {
+      if (!ms || ms < 0) return '00:00:00';
+      const sec = Math.floor(ms / 1000);
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+    }
+
+    function sendToGoogleSheets(obj) {
+      if (!scriptUrl) return;
+      new Image().src = scriptUrl + '?' + new URLSearchParams(obj).toString();
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       5. VIEW NAVIGATION
+    ───────────────────────────────────────────────────────────────────────── */
+    function updateAppView() {
+      const vLogin = document.getElementById('viewLogin');
+      const vAgent = document.getElementById('viewAgent');
+      const vAdmin = document.getElementById('viewAdmin');
+      const btnLogout = document.getElementById('btnLogout');
+
+      vLogin.style.display = 'none';
+      vAgent.style.display = 'none';
+      vAdmin.style.display = 'none';
+      btnLogout.style.display = 'none';
+
+      if (!currentAgent) {
+        vLogin.style.display = 'block';
+        document.getElementById('settingsAgentInfoBlock').style.display = 'none';
+      } else {
+        vAgent.style.display = 'block';
+        btnLogout.style.display = 'inline-flex';
+        document.getElementById('agentDisplayName').innerText = currentAgent.firstName;
+        document.getElementById('agentDisplayPin').innerText = currentAgent.pin;
+        document.getElementById('agentDisplayTeam').innerText = currentAgent.team || 'Alpha Ops';
+        
+        document.getElementById('settingsAgentInfoBlock').style.display = 'block';
+        document.getElementById('settingsAgentNameVal').innerText = currentAgent.firstName;
+        document.getElementById('settingsAgentPinVal').innerText = currentAgent.pin;
+
+        renderAvatar();
+        updateUI();
+      }
+    }
+
+    function openSettingsModal() {
+      playSound('click');
+      document.getElementById('settingsModal').classList.add('open');
+    }
+
+    function closeSettingsModal() {
+      playSound('click');
+      document.getElementById('settingsModal').classList.remove('open');
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       6. AGENT LOGIN / LOGOUT
+    ───────────────────────────────────────────────────────────────────────── */
+    function loginAgent() {
+      const name = document.getElementById('loginFirstName').value.trim();
+      const pin = document.getElementById('loginPin').value.trim();
+
+      if (!name || !pin) {
+        alert(currentLang === 'ar' ? "يرجى إدخال الاسم الأول والكود المكون من 4 أرقام" : "Please enter your first name and 4-digit PIN");
+        return;
+      }
+
+      let matched = agents.find(a =>
+        a.firstName.toLowerCase() === name.toLowerCase() && a.pin === pin
+      );
+
+      if (!matched) {
+        if (pin.length === 4 && /^\d+$/.test(pin)) {
+          matched = { firstName: name, pin: pin, team: "Operations", photo: null };
+          agents.push(matched);
+          saveAgents();
+        } else {
+          alert(currentLang === 'ar' ? "الكود يجب أن يتكون من 4 أرقام" : "PIN must be 4 digits");
+          return;
+        }
+      }
+
+      currentAgent = matched;
+      localStorage.setItem('vortex_user', JSON.stringify(matched));
+      playSound('bell');
+      showToast((currentLang === 'ar' ? "مرحباً يا " : "Welcome, ") + matched.firstName);
+      updateAppView();
+    }
+
+    function logoutAgent() {
+      playSound('click');
+      if (confirm(currentLang === 'ar' ? "هل تريد تسجيل الخروج؟" : "Sign out?")) {
+        currentAgent = null;
+        localStorage.removeItem('vortex_user');
+        updateAppView();
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       7. PHOTO UPLOAD
+    ───────────────────────────────────────────────────────────────────────── */
+    function triggerPhotoUpload() {
+      playSound('click');
+      document.getElementById('photoFileInput').click();
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const b64 = e.target.result;
+        currentAgent.photo = b64;
+        localStorage.setItem('vortex_user', JSON.stringify(currentAgent));
+        agents = agents.map(a => a.pin === currentAgent.pin ? { ...a, photo: b64 } : a);
+        localStorage.setItem('vortex_agents', JSON.stringify(agents));
+        renderAvatar();
+        playSound('bell');
+        showToast(currentLang === 'ar' ? "تم تحديث الصورة الشخصية" : "Profile photo updated");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderAvatar() {
+      const box = document.getElementById('agentAvatarBox');
+      if (currentAgent && currentAgent.photo) {
+        box.innerHTML = `<img src="${currentAgent.photo}" />`;
+      } else {
+        const init = currentAgent ? currentAgent.firstName.charAt(0).toUpperCase() : '?';
+        box.innerHTML = `<span>${init}</span>`;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       8. CLOCK & BREAK CONTROL (First & Second 30m Once, On Task Open Break)
+    ───────────────────────────────────────────────────────────────────────── */
+    function toggleClock() {
+      if (!currentAgent) return;
+      const id = currentAgent.pin;
+      const now = Date.now();
+      const isClockedIn = !!localStorage.getItem('vortex_shift_start_' + id);
+
+      if (!isClockedIn) {
+        // Clock In: Reset single-use break locks
+        localStorage.setItem('vortex_shift_start_' + id, now);
+        localStorage.setItem('vortex_status_' + id, 'ON_SHIFT');
+        localStorage.removeItem('vortex_break_cat_' + id);
+        localStorage.removeItem('vortex_break_start_' + id);
+        localStorage.removeItem('vortex_used_FIRST_BREAK_' + id);
+        localStorage.removeItem('vortex_used_SECOND_BREAK_' + id);
+
+        playSound('bell');
+        addLog(new Date().toLocaleString(), 'تسجيل حضور (Clock In)', '00:00:00');
+        showToast(currentLang === 'ar' ? "تم تسجيل الحضور" : "Clocked In");
+      } else {
+        // Clock Out
+        const start = parseInt(localStorage.getItem('vortex_shift_start_' + id), 10);
+        const duration = formatDuration(now - start);
+
+        localStorage.removeItem('vortex_shift_start_' + id);
+        localStorage.setItem('vortex_status_' + id, 'OFFLINE');
+        localStorage.removeItem('vortex_break_cat_' + id);
+        localStorage.removeItem('vortex_break_start_' + id);
+
+        playSound('click');
+        addLog(new Date().toLocaleString(), 'تسجيل انصراف (Clock Out)', duration);
+        showToast(currentLang === 'ar' ? "تم تسجيل الانصراف" : "Clocked Out");
+      }
+      updateUI();
+    }
+
+    function startBreak(catId, catLabel, isOneTime) {
+      if (!currentAgent) return;
+      const id = currentAgent.pin;
+
+      // Lock enforcement
+      if (isOneTime && localStorage.getItem('vortex_used_' + catId + '_' + id) === 'true') {
+        alert(currentLang === 'ar' 
+          ? "لقد قمت باستهلاك هذا البريك بالفعل خلال الشيفت الحالي ولا يمكنك اختياره مرة أخرى!" 
+          : "You have already taken this break during your current shift!");
+        return;
+      }
+
+      const now = Date.now();
+      localStorage.setItem('vortex_status_' + id, catId);
+      localStorage.setItem('vortex_break_cat_' + id, catLabel);
+      localStorage.setItem('vortex_break_start_' + id, now);
+
+      if (isOneTime) {
+        localStorage.setItem('vortex_used_' + catId + '_' + id, 'true');
+      }
+
+      playSound('bell');
+      addLog(new Date().toLocaleString(), 'بدء ' + catLabel, '00:00:00');
+      showToast((currentLang === 'ar' ? "بدء " : "Started ") + catLabel);
+      updateUI();
+    }
+
+    /* STANDALONE DEDICATED END BREAK BUTTON */
+    function endBreakAndReturnToWork() {
+      if (!currentAgent) return;
+      const id = currentAgent.pin;
+      const now = Date.now();
+      const start = parseInt(localStorage.getItem('vortex_break_start_' + id) || now, 10);
+      const cat = localStorage.getItem('vortex_break_cat_' + id) || 'Break';
+      const duration = formatDuration(now - start);
+
+      localStorage.setItem('vortex_status_' + id, 'ON_SHIFT');
+      localStorage.removeItem('vortex_break_cat_' + id);
+      localStorage.removeItem('vortex_break_start_' + id);
+
+      playSound('click');
+      addLog(new Date().toLocaleString(), 'إنهاء ' + cat + ' (End Break)', duration);
+      showToast(currentLang === 'ar' ? "تم إنهاء البريك والعودة للعمل" : "Break ended, back on shift");
+      updateUI();
+    }
+
+    function addLog(timestamp, action, duration) {
+      const notesEl = document.getElementById('notesInput');
+      const notes = notesEl ? notesEl.value.trim() : '';
+      if (notesEl) notesEl.value = '';
+
+      const entry = {
+        id: 'log-' + Date.now(),
+        timestamp: timestamp,
+        agentId: currentAgent.pin,
+        agentName: currentAgent.firstName,
+        action: action,
+        duration: duration,
+        notes: notes || '-'
+      };
+
+      logs.unshift(entry);
+      localStorage.setItem('vortex_logs', JSON.stringify(logs));
+
+      sendToGoogleSheets({
+        timestamp: entry.timestamp,
+        agentId: entry.agentId,
+        agentName: entry.agentName,
+        action: entry.action,
+        duration: entry.duration,
+        notes: entry.notes
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       9. UI RENDERING
+    ───────────────────────────────────────────────────────────────────────── */
+    function updateUI() {
+      if (!currentAgent) return;
+      const id = currentAgent.pin;
+      const shiftStart = parseInt(localStorage.getItem('vortex_shift_start_' + id) || '0', 10);
+      const status = localStorage.getItem('vortex_status_' + id) || 'OFFLINE';
+      const activeBreak = localStorage.getItem('vortex_break_cat_' + id) || '';
+
+      const isClockedIn = !!shiftStart;
+      const isOnBreak = status !== 'ON_SHIFT' && status !== 'OFFLINE';
+
+      const badge = document.getElementById('agentStatusBadge');
+      const shiftStartTxt = document.getElementById('shiftStartTimeText');
+
+      if (!isClockedIn) {
+        badge.innerText = currentLang === 'ar' ? 'خارج الشيفت' : 'Offline';
+        badge.className = 'status-tag';
+        shiftStartTxt.innerText = '—';
+      } else if (isOnBreak) {
+        badge.innerText = activeBreak;
+        badge.className = 'status-tag break';
+        shiftStartTxt.innerText = new Date(shiftStart).toLocaleTimeString();
+      } else {
+        badge.innerText = currentLang === 'ar' ? 'في الشيفت' : 'On Shift';
+        badge.className = 'status-tag online';
+        shiftStartTxt.innerText = new Date(shiftStart).toLocaleTimeString();
+      }
+
+      // Shift Master Button
+      const toggleBtn = document.getElementById('btnClockToggle');
+      const toggleText = document.getElementById('clockToggleText');
+      if (isClockedIn) {
+        toggleBtn.className = 'btn-shift-master clock-out';
+        toggleText.innerText = currentLang === 'ar' ? 'تسجيل انصراف (Clock Out)' : 'Clock Out';
+      } else {
+        toggleBtn.className = 'btn-shift-master clock-in';
+        toggleText.innerText = currentLang === 'ar' ? 'تسجيل حضور (Clock In)' : 'Clock In';
+      }
+
+      // Standalone End Break Button Visibility
+      const endBreakBtn = document.getElementById('btnEndBreakStandalone');
+      if (isOnBreak) {
+        endBreakBtn.classList.add('active');
+      } else {
+        endBreakBtn.classList.remove('active');
+      }
+
+      // Check single-use breaks
+      const usedB1 = localStorage.getItem('vortex_used_FIRST_BREAK_' + id) === 'true';
+      const usedB2 = localStorage.getItem('vortex_used_SECOND_BREAK_' + id) === 'true';
+
+      const b1 = document.getElementById('btnBreak1');
+      const b2 = document.getElementById('btnBreak2');
+      const bOnTask = document.getElementById('btnOnTask');
+      const bWC = document.getElementById('btnRestroom');
+      const bMeeting = document.getElementById('btnMeeting');
+
+      b1.disabled = !isClockedIn || (usedB1 && activeBreak !== 'First Break (30m)');
+      b1.classList.remove('current', 'locked');
+      if (activeBreak === 'First Break (30m)') b1.classList.add('current');
+      else if (usedB1) b1.classList.add('locked');
+
+      b2.disabled = !isClockedIn || (usedB2 && activeBreak !== 'Second Break (30m)');
+      b2.classList.remove('current', 'locked');
+      if (activeBreak === 'Second Break (30m)') b2.classList.add('current');
+      else if (usedB2) b2.classList.add('locked');
+
+      [bOnTask, bWC, bMeeting].forEach(b => b.disabled = !isClockedIn);
+      bOnTask.classList.toggle('current', activeBreak === 'On Task');
+      bWC.classList.toggle('current', activeBreak === 'WC');
+      bMeeting.classList.toggle('current', activeBreak === 'Meeting');
+
+      document.getElementById('activeBreakCategoryText').innerText = activeBreak || (currentLang === 'ar' ? 'لا يوجد' : 'None');
+
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const tbody = document.getElementById('logsTableBody');
+      const filtered = logs.filter(l => l.agentId === currentAgent.pin).slice(0, 8);
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--text-faint);">
+          ${currentLang === 'ar' ? 'لا توجد حركات مسجلة للشيفت الحالي' : 'No activity records found'}
+        </td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(l => `
+        <tr>
+          <td>${l.timestamp}</td>
+          <td><strong style="color:var(--text-main);">${l.action}</strong></td>
+          <td style="font-family:var(--font-mono);">${l.duration}</td>
+          <td>${l.notes}</td>
+        </tr>
+      `).join('');
+    }
+
+    // High Precision Timer Ticker
+    setInterval(() => {
+      if (!currentAgent) return;
+      const id = currentAgent.pin;
+      const shiftStart = parseInt(localStorage.getItem('vortex_shift_start_' + id) || '0', 10);
+      const breakStart = parseInt(localStorage.getItem('vortex_break_start_' + id) || '0', 10);
+      const status = localStorage.getItem('vortex_status_' + id) || 'OFFLINE';
+      const now = Date.now();
+
+      const shiftEl = document.getElementById('shiftTimerDisplay');
+      const breakEl = document.getElementById('breakTimerDisplay');
+
+      shiftEl.innerText = (shiftStart && status !== 'OFFLINE') ? formatDuration(now - shiftStart) : '00:00:00';
+      breakEl.innerText = (breakStart && status !== 'ON_SHIFT' && status !== 'OFFLINE') ? formatDuration(now - breakStart) : '00:00:00';
+    }, 500);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       10. REDESIGNED COMPACT EXECUTIVE MANAGER CONSOLE
+       Multi-tab navigation + Scrollable split view!
+    ───────────────────────────────────────────────────────────────────────── */
+    function switchManagerTab(tab) {
+      playSound('click');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.manager-tab-pane').forEach(p => p.classList.remove('active'));
+
+      if (tab === 'overview') {
+        document.getElementById('tabBtnOverview').classList.add('active');
+        document.getElementById('tabPaneOverview').classList.add('active');
+      } else if (tab === 'logs') {
+        document.getElementById('tabBtnLogs').classList.add('active');
+        document.getElementById('tabPaneLogs').classList.add('active');
+        renderAdminAuditLogs();
+      } else if (tab === 'cloud') {
+        document.getElementById('tabBtnCloud').classList.add('active');
+        document.getElementById('tabPaneCloud').classList.add('active');
+      }
+    }
+
+    function openManagerLoginModal() {
+      playSound('click');
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('managerLoginModal').classList.add('open');
+    }
+
+    function closeManagerLoginModal() {
+      playSound('click');
+      document.getElementById('managerLoginModal').classList.remove('open');
+    }
+
+    function verifyManagerLogin() {
+      const user = document.getElementById('adminUsername').value.trim();
+      const pass = document.getElementById('adminPassword').value.trim();
+      const creds = getManagerCredentials();
+
+      if ((user === creds.username || user === 'admin' || user === 'مدير') && (pass === creds.password)) {
+        closeManagerLoginModal();
+        playSound('bell');
+        document.getElementById('viewLogin').style.display = 'none';
+        document.getElementById('viewAgent').style.display = 'none';
+        document.getElementById('viewAdmin').style.display = 'block';
+        document.getElementById('adminWebhookInput').value = scriptUrl;
+        
+        switchManagerTab('overview');
+        renderAdminRoster();
+        calculateAdminStats();
+      } else {
+        alert(currentLang === 'ar' ? "بيانات الدخول غير صحيحة" : "Invalid credentials");
+      }
+    }
+
+    function exitAdminView() {
+      playSound('click');
+      document.getElementById('viewAdmin').style.display = 'none';
+      updateAppView();
+    }
+
+    /* MANAGER PROFILE & CREDENTIALS MODAL */
+    function openManagerProfileModal() {
+      playSound('click');
+      const creds = getManagerCredentials();
+      document.getElementById('mgrProfileUsername').value = creds.username;
+      document.getElementById('mgrProfileEmail').value = creds.email;
+      document.getElementById('mgrCurrentPass').value = '';
+      document.getElementById('mgrNewPass').value = '';
+      document.getElementById('managerProfileModal').classList.add('open');
+    }
+
+    function closeManagerProfileModal() {
+      playSound('click');
+      document.getElementById('managerProfileModal').classList.remove('open');
+    }
+
+    function saveManagerProfileSettings() {
+      const creds = getManagerCredentials();
+      const current = document.getElementById('mgrCurrentPass').value.trim();
+      const newUser = document.getElementById('mgrProfileUsername').value.trim();
+      const newEmail = document.getElementById('mgrProfileEmail').value.trim();
+      const newPass = document.getElementById('mgrNewPass').value.trim();
+
+      if (current !== creds.password) {
+        alert(currentLang === 'ar' ? "كلمة المرور الحالية غير صحيحة لتأكيد التغيير" : "Current password incorrect");
+        return;
+      }
+
+      if (newUser) localStorage.setItem('vortex_mgr_username', newUser);
+      if (newEmail) localStorage.setItem('vortex_mgr_email', newEmail);
+      if (newPass) {
+        if (newPass.length < 3) {
+          alert("كلمة المرور يجب أن تكون 3 خانات على الأقل");
+          return;
+        }
+        localStorage.setItem('vortex_admin_pass', newPass);
+      }
+
+      closeManagerProfileModal();
+      playSound('bell');
+      showToast(currentLang === 'ar' ? "تم تحديث بيانات المدير بنجاح" : "Manager credentials updated");
+    }
+
+    function calculateAdminStats() {
+      let onShift = 0, onBreak = 0, offline = 0;
+      agents.forEach(a => {
+        const status = localStorage.getItem('vortex_status_' + a.pin) || 'OFFLINE';
+        if (status === 'ON_SHIFT') onShift++;
+        else if (status !== 'OFFLINE') onBreak++;
+        else offline++;
+      });
+      document.getElementById('statTotalAgents').innerText = agents.length;
+      document.getElementById('statOnShift').innerText = onShift;
+      document.getElementById('statOnBreak').innerText = onBreak;
+      document.getElementById('statOffline').innerText = offline;
+      document.getElementById('rosterCountBadge').innerText = agents.length + " موظف";
+    }
+
+    /* COMPACT SCROLLABLE ROSTER & AGENT INSPECTOR */
+    function renderAdminRoster() {
+      const container = document.getElementById('adminScrollableRoster');
+      container.innerHTML = agents.map(a => {
+        const status = localStorage.getItem('vortex_status_' + a.pin) || 'OFFLINE';
+        let statusBadge = `<span style="font-size: 10px; color: var(--text-faint);">Offline</span>`;
+        if (status === 'ON_SHIFT') statusBadge = `<span style="font-size: 10px; color: #10b981; font-weight: 700;">On Shift</span>`;
+        else if (status !== 'OFFLINE') statusBadge = `<span style="font-size: 10px; color: var(--accent-primary); font-weight: 700;">Break</span>`;
+
+        return `
+          <div class="agent-row-item" onclick="inspectAgent('${a.pin}')">
+            <div>
+              <strong style="font-size: 13px;">${a.firstName}</strong>
+              <div style="font-size: 11px; color: var(--text-faint);">PIN: ${a.pin} • ${a.team || 'Ops'}</div>
+            </div>
+            ${statusBadge}
+          </div>
+        `;
+      }).join('');
+
+      if (agents.length > 0) inspectAgent(agents[0].pin);
+    }
+
+    function inspectAgent(pin) {
+      const a = agents.find(x => x.pin === pin);
+      if (!a) return;
+
+      document.querySelectorAll('.agent-row-item').forEach(el => el.classList.remove('selected'));
+
+      const status = localStorage.getItem('vortex_status_' + a.pin) || 'OFFLINE';
+      const shiftStart = parseInt(localStorage.getItem('vortex_shift_start_' + a.pin) || '0', 10);
+      const activeBreak = localStorage.getItem('vortex_break_cat_' + a.pin) || 'لا يوجد';
+      const shiftDuration = (shiftStart && status !== 'OFFLINE') ? formatDuration(Date.now() - shiftStart) : '00:00:00';
+
+      const inspector = document.getElementById('agentDetailInspector');
+      inspector.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 14px; margin-bottom: 14px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);">${a.firstName}</h3>
+            <span style="font-size: 12px; color: var(--text-faint);">كود الدخول: <strong style="font-family: var(--font-mono); color: var(--accent-primary);">${a.pin}</strong> • الفريق: ${a.team || 'Alpha Ops'}</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-nav" onclick="openEditAgentModal('${a.pin}')">✏️ تعديل</button>
+            <button class="btn-nav" style="color: #ef4444;" onclick="deleteAgent('${a.pin}')">🗑️ حذف</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <div style="background: var(--card-surface-elevated); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border-light);">
+            <div style="font-size: 11px; color: var(--text-faint);">الحالة الحالية:</div>
+            <strong style="font-size: 14px; color: ${status === 'ON_SHIFT' ? '#10b981' : (status === 'OFFLINE' ? 'var(--text-faint)' : 'var(--accent-primary)')};">${status}</strong>
+          </div>
+          <div style="background: var(--card-surface-elevated); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border-light);">
+            <div style="font-size: 11px; color: var(--text-faint);">الاستراحة النشطة:</div>
+            <strong style="font-size: 14px;">${activeBreak}</strong>
+          </div>
+        </div>
+
+        <div style="background: var(--card-surface-elevated); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border-light);">
+          <div style="font-size: 11px; color: var(--text-faint);">إجمالي وقت العمل اليوم:</div>
+          <div style="font-size: 24px; font-family: var(--font-mono); font-weight: 800; color: var(--text-main); margin-top: 4px;">${shiftDuration}</div>
+        </div>
+      `;
+    }
+
+    function renderAdminAuditLogs() {
+      const tbody = document.getElementById('adminLogsTableBody');
+      if (!logs.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--text-faint);">لا توجد حركات مسجلة بعد</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = logs.slice(0, 40).map(l => `
+        <tr>
+          <td>${l.timestamp}</td>
+          <td><strong style="color:var(--text-main);">${l.agentName}</strong> (${l.agentId})</td>
+          <td>${l.action}</td>
+          <td style="font-family:var(--font-mono);">${l.duration}</td>
+          <td>${l.notes}</td>
+        </tr>
+      `).join('');
+    }
+
+    function saveAdminWebhook() {
+      playSound('click');
+      const url = document.getElementById('adminWebhookInput').value.trim();
+      scriptUrl = url;
+      localStorage.setItem('vortex_webhook', url);
+      showToast(currentLang === 'ar' ? "تم حفظ الرابط المركزي بنجاح" : "URL Saved");
+    }
+
+    function testSheetFromAdmin() {
+      playSound('click');
+      const url = document.getElementById('adminWebhookInput').value.trim();
+      if (!url) return;
+      const params = new URLSearchParams({
+        timestamp: new Date().toLocaleString(),
+        agentId: 'ADMIN',
+        agentName: 'Sayed Gouda Ping',
+        action: 'فحص الاتصال المباشر ✅',
+        duration: '00:00:01',
+        notes: 'Executive test ping'
+      });
+      new Image().src = url + '?' + params.toString();
+      showToast(currentLang === 'ar' ? "تم إرسال الصف التجريبي للشيت" : "Ping sent to Sheet");
+    }
+
+    /* CRUD AGENTS */
+    function openAddAgentModal() {
+      playSound('click');
+      document.getElementById('editAgentOriginalPin').value = "";
+      document.getElementById('modalAgentName').value = "";
+      document.getElementById('modalAgentPin').value = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('agentEditModal').classList.add('open');
+    }
+    function openEditAgentModal(pin) {
+      playSound('click');
+      const a = agents.find(x => x.pin === pin);
+      if (!a) return;
+      document.getElementById('editAgentOriginalPin').value = pin;
+      document.getElementById('modalAgentName').value = a.firstName;
+      document.getElementById('modalAgentPin').value = a.pin;
+      document.getElementById('modalAgentTeam').value = a.team || "Alpha Ops";
+      document.getElementById('agentEditModal').classList.add('open');
+    }
+    function closeAgentEditModal() {
+      playSound('click');
+      document.getElementById('agentEditModal').classList.remove('open');
+    }
+    function saveAgentFromModal() {
+      const origPin = document.getElementById('editAgentOriginalPin').value;
+      const name = document.getElementById('modalAgentName').value.trim();
+      const pin = document.getElementById('modalAgentPin').value.trim();
+      const team = document.getElementById('modalAgentTeam').value.trim() || "Operations";
+
+      if (!name || pin.length !== 4) { alert("أدخل اسم وكود 4 أرقام"); return; }
+      if (!origPin) {
+        agents.push({ firstName: name, pin: pin, team: team, photo: null });
+      } else {
+        agents = agents.map(a => a.pin === origPin ? { ...a, firstName: name, pin: pin, team: team } : a);
+      }
+      saveAgents();
+      closeAgentEditModal();
+      renderAdminRoster();
+      calculateAdminStats();
+    }
+    function deleteAgent(pin) {
+      playSound('click');
+      if (!confirm("هل أنت متأكد من حذف هذا الموظف؟")) return;
+      agents = agents.filter(x => x.pin !== pin);
+      saveAgents();
+      renderAdminRoster();
+      calculateAdminStats();
+    }
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       11. INITIALIZATION
+    ───────────────────────────────────────────────────────────────────────── */
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('vortex_theme') || 'dark';
+      const savedAccent = localStorage.getItem('vortex_accent') || 'blue';
+      setAppTheme(savedTheme);
+      setAccentColor(savedAccent);
+      setAppLanguage(currentLang);
+      document.getElementById('btnAudioToggle').innerText = audioEnabled ? '🔊' : '🔇';
+      updateAppView();
+    });
+  </script>
+</body>
+</html>
